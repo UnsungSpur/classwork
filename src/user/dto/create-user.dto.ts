@@ -1,14 +1,14 @@
-import { IsNotEmpty, IsString } from "class-validator"
+import { IsNotEmpty, IsOptional, IsString, MaxLength, maxLength } from "class-validator"
 import { IsStrongPassword } from "class-validator";
 
 
 export class CreateUserDto {
     @IsNotEmpty()
     @IsString()
-    name: string
+    @MaxLength(20)
+    readonly name: string
 
-    @IsNotEmpty()
-    created: Date
+ 
 
     @IsNotEmpty()
     @IsStrongPassword({
@@ -23,6 +23,12 @@ export class CreateUserDto {
         message: 'Password must contain uppercase, lowercase, numbers, and special characters',
     })
     
-    password: string;  
+    readonly password: string;  
+
+
+
+    @IsOptional()
+    readonly createdAt?: string;
+
     
 }

@@ -2,18 +2,26 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    this.userService.create({
+      name: createUserDto.name,
+      password: hashedPassword,
+      createdAt: new Date().toISOString(),
+    });
+
+    return {message: `user created successfully`}
   }
 
   @Get()
-  findAll() {
+  findAll():CreateUserDto[] {
     return this.userService.findAll();
   }
 

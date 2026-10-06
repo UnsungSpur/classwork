@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+      private users:CreateUserDto[] = []
+  create(createUserDto: CreateUserDto):void {
+    // return 'This action adds a new user';
+    this.users.push(createUserDto)
   }
 
-  findAll() {
-    return `This action returns all user`;
+  findAll():CreateUserDto[] {
+    return this.users;
   }
 
   findOne(id: number) {
